@@ -1,0 +1,47 @@
+{
+  "name": "carve",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "npm run compile && npm run typechain",
+    "compile": "npx hardhat compile",
+    "typechain": "npx hardhat compile && npx hardhat typechain",
+    "test": "npx hardhat test",
+    "deploy:ganache": "npm run build && npx hardhat run --network ganache scripts/deploy.js",
+    "deploy:ganachelocal": "npm run build && npx hardhat run --network localhost scripts/deploy.js",
+    "deploy:testnet": "npm run build && npx hardhat run --network ropsten scripts/deploy.js",
+    "deploy": "npm run build && npx hardhat run --network mainnet scripts/deploy.js",
+    "verify:testnet": "npx hardhat verify --network ropsten",
+    "verify": "npx hardhat verify --network mainnet"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.1",
+    "@nomiclabs/hardhat-etherscan": "*",
+    "@nomiclabs/hardhat-ganache": "*",
+    "@nomiclabs/hardhat-waffle": "*",
+    "@openzeppelin/contracts": "^3.3.0-solc-0.7",
+    "@typechain/ethers-v5": "^3.0.0",
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.10",
+    "chai": "^4.2.0",
+    "dotenv": "*",
+    "ethereum-waffle": "^3.2.1",
+    "ethereumjs-util": "^7.0.7",
+    "ethers": "^5.0.23",
+    "hardhat": "^2.0.4",
+    "hardhat-typechain": "*",
+    "mocha": "^8.2.1",
+    "solc": "0.7.5",
+    "ts-generator": "*",
+    "ts-node": "^9.0.0",
+    "typechain": "^4.0.0",
+    "typescript": "^4.0.3"
+  }
+}

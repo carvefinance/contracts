@@ -1,0 +1,10 @@
+.env
+artifacts
+.vscode
+bin
+build
+cache
+node_modules
+typechain
+scripts/deploy.js
+package-lock.json
