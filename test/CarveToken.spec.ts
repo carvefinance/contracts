@@ -50,6 +50,9 @@ describe('CarveToken', () => {
       it('returns the total supply', async () => {
         expect(await token.totalSupply()).to.eq(0);
       });
+      it('returns the cap', async () => {
+        expect(await token.CAP()).to.eq(utils.parseEther('100000'));
+      });
     });
 
     describe('reward pool', () => {
@@ -74,6 +77,11 @@ describe('CarveToken', () => {
         expect(bobBal.valueOf()).to.be.eq('1000');
         expect(carolBal.valueOf()).to.be.eq('0');
       });
+      it('cannot mint more then cap', async () => {
+        await expect(
+          token.mint(bob.address, utils.parseEther('100001'))
+        ).to.be.reverted;
+      });
     });
 
     describe('fee', () => {
@@ -90,7 +98,7 @@ describe('CarveToken', () => {
       it('should supply token transfers properly', async () => {
         await token.mint(owner.address, utils.parseEther('1000'));
         await token.mint(bob.address,  utils.parseEther('1000'));
-        expect((await token.totalSupply()).valueOf()).to.be.eq(utils.parseUnits('2000'));
+
 
         await token.transfer(carol.address,  utils.parseEther('100'));
         await token.connect(bob).transfer(carol.address,  utils.parseEther('100'));

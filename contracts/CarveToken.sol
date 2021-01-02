@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.7.5;
+pragma solidity ^0.7.6;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./GovernanceToken.sol";
@@ -11,6 +11,7 @@ contract CarveToken is GovernanceToken, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant GOV_ROLE = keccak256("GOV_ROLE");
 
+    uint256 public constant CAP = 100 * (10 ** 3) * (10 ** 18);
     uint256 public burnedSupply;
     uint256 public fee;
     address public rewardPoolAddress;
@@ -38,6 +39,10 @@ contract CarveToken is GovernanceToken, AccessControl {
         _;
     }
 
+    /**
+     * @notice Helper function to return fee for amount
+     * @param amount amount to calculate fee on
+     */
     function feeForAmount(uint256 amount) public view returns (uint256) {
         return amount.mul(fee).div(1000);
     }
@@ -68,7 +73,7 @@ contract CarveToken is GovernanceToken, AccessControl {
      *
      * - `to` cannot be the zero address.
      */
-    function mint(address to, uint256 amount) public onlyMinters {
+    function mint(address to, uint256 amount) external onlyMinters {
         _mint(to, amount);
     }
 
@@ -110,7 +115,7 @@ contract CarveToken is GovernanceToken, AccessControl {
      *
      * See {ERC20-_burn}.
      */
-    function burn(uint256 amount) public {
+    function burn(uint256 amount) external {
         _burn(msg.sender, amount);
     }
 
@@ -125,7 +130,7 @@ contract CarveToken is GovernanceToken, AccessControl {
      * - the caller must have allowance for ``accounts``'s tokens of at least
      * `amount`.
      */
-    function burnFrom(address account, uint256 amount) public {
+    function burnFrom(address account, uint256 amount) external {
         uint256 decreasedAllowance = allowance(account, msg.sender).sub(amount, "ERC20: burn amount exceeds allowance");
         _approve(account, msg.sender, decreasedAllowance);
         _burn(account, amount);
@@ -172,6 +177,9 @@ contract CarveToken is GovernanceToken, AccessControl {
      */
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal override {
         super._beforeTokenTransfer(from, to, amount);
+        if (from == address(0)) { // When minting tokens
+            require(totalSupply().add(amount) <= CAP, "cap exceeded");
+        }
         _moveDelegates(_delegates[from], _delegates[to], amount);
     }
 }

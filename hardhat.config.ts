@@ -16,10 +16,11 @@ const ETHERSCAN_API_KEY = `${process.env.ETHERSCAN_API_KEY}`;
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.7.5",
+    version: "0.7.6",
     settings: {
       optimizer: {
-        enabled: true
+        enabled: true,
+        runs: 9999
       }
     }
   },
@@ -32,7 +33,10 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {
-      loggingEnabled: false
+      loggingEnabled: false,
+      /*forking: {
+        url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`
+      }*/
     },
     localhost: {
       url: "http://127.0.0.1:8546"
@@ -47,7 +51,7 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
-      accounts: [MAINNET_PRIVATE_KEY]
+      accounts: [MAINNET_PRIVATE_KEY],
     }
   },
   etherscan: {

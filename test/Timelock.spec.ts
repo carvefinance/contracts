@@ -94,7 +94,7 @@ describe('Timelock', () => {
     let masterCarver: Contract =  await deployContract(alice, MasterCarver, [carve.address, rewardpool.address, dev.address, '1000', '0', '1000']);
 
     await carve.grantRole(MINTER_ROLE, masterCarver.address);
-    await masterCarver.add('100', lp1.address);
+    await masterCarver.add('0', lp1.address);
     await masterCarver.transferOwnership(timelock.address);
     const eta = (await latestBlockTimestamp()).add(duration.days(4));
     await timelock.connect(bob).queueTransaction(
@@ -105,6 +105,7 @@ describe('Timelock', () => {
         masterCarver.address, '0', 'add(uint256,address)',
         encodeParameters(['uint256', 'address'], ['100', lp2.address]), eta
     );
+
     await advanceBlockAndTime(duration.days(4).toNumber());
     await timelock.connect(bob).executeTransaction(
         masterCarver.address, '0', 'set(uint256,uint256)',
@@ -114,6 +115,7 @@ describe('Timelock', () => {
         masterCarver.address, '0', 'add(uint256,address)',
         encodeParameters(['uint256', 'address'], ['100', lp2.address]), eta
     );
+
     expect((await masterCarver.poolInfo('0')).valueOf().allocPoint).to.eq(200);
     expect((await masterCarver.totalAllocPoint()).valueOf()).to.eq(300);
     expect((await masterCarver.poolLength()).valueOf()).to.eq(2);

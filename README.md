@@ -7,9 +7,9 @@ https://carve.finance. Feel free to read the code. More details coming soon.
 
 ## Deployed Contracts
 
-- CarveToken - https://etherscan.io/token/0xFCac6210E2AD15b3cD05a3b11C95D25C74a53efB
-- MasterCarver - https://etherscan.io/address/0x5f3548672ACb89dF806a2f368ca43b6c01461983
-- CarveStaking - https://etherscan.io/address/0x5631552C609718a8Bc55147310869949FB6B1b5c
+- CarveToken - https://etherscan.io/token/0x34d0df862d12cb05e97ebf5b38725284966d0ad6
+- MasterCarver - https://etherscan.io/address/0x390b494e1f6a3598723143ae6f339110938eb853
+- CarveStaking - https://etherscan.io/address/0xdbfef66f8f7d13b5ce50a9ded94616c18495ca0a
 - Timelock - https://etherscan.io/address/0xb02f093be22d109486CBD9432a66fbe7daCC336e
 
 ## Audits
