@@ -91,29 +91,29 @@ describe('Timelock', () => {
   it('should also work with MasterCarver', async () => {
     let lp1: Contract = await deployContract(minter, MockERC20, ['LPToken1', 'LP1', '10000000000']);
     let lp2: Contract = await deployContract(minter, MockERC20, ['LPToken2', 'LP2', '10000000000']);
-    let masterCarver: Contract =  await deployContract(alice, MasterCarver, [carve.address, rewardpool.address, dev.address, '1000', '0', '1000']);
+    let masterCarver: Contract =  await deployContract(alice, MasterCarver, [carve.address, rewardpool.address, dev.address, '1000', '0']);
 
     await carve.grantRole(MINTER_ROLE, masterCarver.address);
-    await masterCarver.add('0', lp1.address);
+    await masterCarver.add('0', lp1.address, '0');
     await masterCarver.transferOwnership(timelock.address);
     const eta = (await latestBlockTimestamp()).add(duration.days(4));
     await timelock.connect(bob).queueTransaction(
-        masterCarver.address, '0', 'set(uint256,uint256)',
-        encodeParameters(['uint256', 'uint256'], ['0', '200']), eta
+        masterCarver.address, '0', 'set(uint256,uint256,uint8)',
+        encodeParameters(['uint256', 'uint256', 'uint8'], ['0', '200', '0']), eta
     );
     await timelock.connect(bob).queueTransaction(
-        masterCarver.address, '0', 'add(uint256,address)',
-        encodeParameters(['uint256', 'address'], ['100', lp2.address]), eta
+        masterCarver.address, '0', 'add(uint256,address,uint8)',
+        encodeParameters(['uint256', 'address', 'uint8'], ['100', lp2.address, '0']), eta
     );
 
     await advanceBlockAndTime(duration.days(4).toNumber());
     await timelock.connect(bob).executeTransaction(
-        masterCarver.address, '0', 'set(uint256,uint256)',
-        encodeParameters(['uint256', 'uint256'], ['0', '200']), eta
+        masterCarver.address, '0', 'set(uint256,uint256,uint8)',
+        encodeParameters(['uint256', 'uint256', 'uint8'], ['0', '200', '0']), eta
     );
     await timelock.connect(bob).executeTransaction(
-        masterCarver.address, '0', 'add(uint256,address)',
-        encodeParameters(['uint256', 'address'], ['100', lp2.address]), eta
+        masterCarver.address, '0', 'add(uint256,address,uint8)',
+        encodeParameters(['uint256', 'address', 'uint8'], ['100', lp2.address, '0']), eta
     );
 
     expect((await masterCarver.poolInfo('0')).valueOf().allocPoint).to.eq(200);
